@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
 
   const cards = [
-    { id: 1, title: "Ink", sub: "The Reader", url: "https://github.com/Wreck-X/ink", description: "A minimal, distraction-free reading app built for long-form content. Ink strips away the noise and lets the words breathe — clean typography, quiet interface, pure focus." },
+    { id: 1, title: "Ink", sub: "The Epub Reader", url: "https://github.com/Wreck-X/ink", description: "A minimal, distraction-free reading app built for long-form content. Ink strips away the noise and lets the words breathe — clean typography, quiet interface, pure focus." },
     { id: 2, title: "Browser", sub: "Prototype", url: "https://github.com/Wreck-X/browser-prototype", description: "An experimental browser prototype exploring alternative paradigms for navigating the web. Built to question assumptions about tabs, history, and how we move through information." },
     { id: 3, title: "News", sub: "Block", url: "https://github.com/Wreck-X/news-block", description: "A focused news aggregator that surfaces signal over noise. News Block curates headlines into digestible blocks, giving you a clear picture of the day without the scroll-bait." },
     { id: 4, title: "Root", sub: "Club Backend", url: "https://github.com/Wreck-X/root", description: "The backbone of a club management system. Root handles memberships, events, and permissions — a robust backend built to keep communities organised and running smoothly." },
@@ -74,8 +74,6 @@
 </svelte:head>
 
 <div class="root">
-
-  <!-- ═══ CAROUSEL SCREEN ═══ -->
   <div class="screen carousel-screen" class:slide-out={transitioning}>
 
     <div class="bg-glow"></div>
@@ -85,20 +83,12 @@
 
     <header class="site-header">
       <div class="header-left">
-        <span class="header-logo">WX</span>
-        <span class="header-divider">|</span>
         <span class="header-label">Projects</span>
       </div>
       <div class="header-right">
         <span class="header-count">{String(cards.length).padStart(2,'0')} records</span>
       </div>
     </header>
-
-    <div class="hint-corner">
-      <span class="hint-dot"></span>
-      rotate to explore
-    </div>
-
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="scene" on:mouseleave={unsnap}>
       <div class="stage-wrap">
@@ -121,8 +111,8 @@
               <div
                 class="vinyl"
                 style="
-                  opacity: {isActive ? 1 : 0.45};
-                  transform: {isActive ? 'translateZ(40px) scale(1.08)' : 'translateZ(0px) scale(1)'};
+                  opacity: {isActive ? 1 : 1};
+                  transform: {isActive ? 'translateZ(40px) scale(1.25)' : 'translateZ(0px) scale(1)'};
                   transition: opacity 0.4s ease, transform 0.4s ease;
                   cursor: {isActive ? 'pointer' : 'default'};
                   filter: {isActive
@@ -270,7 +260,6 @@
     will-change: transform;
   }
 
-  /* ════ CAROUSEL SCREEN ════ */
   .carousel-screen {
     background: #07070a;
     transform: translateY(0);
@@ -289,14 +278,7 @@
       radial-gradient(ellipse 35% 25% at 85% 15%, rgba(60,100,70,0.055) 0%, transparent 60%);
     pointer-events: none; z-index: 0;
   }
-  .bg-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-    background-size: 52px 52px;
-    pointer-events: none; z-index: 0;
-  }
+
   .bg-scanlines {
     position: absolute; inset: 0;
     background: repeating-linear-gradient(
@@ -329,28 +311,19 @@
   .header-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem; letter-spacing: 0.22em;
-    text-transform: uppercase; color: rgba(255,255,255,0.28);
+    text-transform: uppercase; color: rgba(255,255,255);
   }
   .header-right {
     font-family: 'Space Mono', monospace;
-    font-size: 0.62rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.17);
+    font-size: 0.62rem; letter-spacing: 0.2em; color: rgba(255,255,255);
   }
 
   .hint-corner {
     position: absolute; top: 5.2rem; right: 2.2rem; z-index: 10;
     font-family: 'Space Mono', monospace;
     font-size: 0.57rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(255,255,255,0.14);
+    color: rgba(255,255,255);
     display: flex; align-items: center; gap: 0.5rem;
-  }
-  .hint-dot {
-    display: inline-block; width: 5px; height: 5px;
-    border-radius: 50%; background: rgba(255,255,255,0.22);
-    animation: pulse 2.8s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.22; transform: scale(1); }
-    50%       { opacity: 0.65; transform: scale(1.35); }
   }
 
   .scene {
@@ -360,7 +333,7 @@
   }
   .stage-wrap {
     position: relative; height: 340px; width: 900px;
-    perspective: 1200px; transform: scale(0.65); overflow: visible;
+    perspective: 1200px; transform: scale(0.5); overflow: visible;
   }
   .stage {
     position: absolute; inset: 0;
@@ -402,7 +375,7 @@
   .card-info-cta {
     font-family: 'Space Mono', monospace;
     font-size: 0.58rem; letter-spacing: 0.14em;
-    color: rgba(255,255,255,0.18); font-style: italic; margin-left: auto;
+    color: rgba(255,255,255); font-style: italic; margin-left: auto;
   }
   .card-info-hint {
     font-family: 'Space Mono', monospace;
@@ -414,7 +387,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ════ DETAIL SCREEN ════ */
   .blank-screen {
     background: #09090b; transform: translateY(100%);
     z-index: 2; display: flex; align-items: center; justify-content: center;
@@ -454,7 +426,6 @@
 
   .detail-vinyl {
     width: 220px; height: 220px; border-radius: 50%;
-    filter: drop-shadow(0 12px 40px rgba(0,0,0,0.85));
     animation: spinSlow 18s linear infinite;
   }
   .detail-vinyl svg { width: 100%; height: 100%; border-radius: 50%; display: block; }
