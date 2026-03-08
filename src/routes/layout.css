@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-forum: 'Forum', serif;
+}
+@layer base {
+  @font-face {
+    font-family: 'Forum';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/Forum-Regular.woff2') format('woff2');
+  }
+
+  body {
+    @apply bg-black text-white; 
+  }
+}
