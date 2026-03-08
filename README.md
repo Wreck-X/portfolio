@@ -1,8 +1,8 @@
 # portfolio
 
-A personal portfolio built with SvelteKit — featuring a 3D vinyl record carousel to showcase projects.
+Portfolio of mine I fear.
 
-**[wreck-x.vercel.app](https://wreck-x.vercel.app)** &nbsp;·&nbsp; [GitHub](https://github.com/Wreck-X)
+**[wreck-x](https://vinyl-portfolio-azure.vercel.app/)** &nbsp;·&nbsp; [GitHub](https://github.com/Wreck-X)
 
 ---
 
