@@ -1,43 +1,59 @@
-# sv
+# portfolio
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A personal portfolio built with SvelteKit — featuring a 3D vinyl record carousel to showcase projects.
 
-## Creating a project
+**[wreck-x.vercel.app](https://wreck-x.vercel.app)** &nbsp;·&nbsp; [GitHub](https://github.com/Wreck-X)
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## stack
 
-To recreate this project with the same configuration:
+- [SvelteKit](https://kit.svelte.dev) — framework
+- [Tailwind CSS](https://tailwindcss.com) — styling (with typography + forms plugins)
+- TypeScript, Prettier, ESLint
 
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" --install npm portfolio
-```
+---
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## getting started
 
 ```sh
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open [localhost:5173](http://localhost:5173) in your browser.
 
-To create a production version of your app:
+---
+
+## build & preview
 
 ```sh
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-# portfolio
+## deploy
+
+This project is deployed on [Vercel](https://vercel.com). Push to `main` to trigger a deployment.
+
+To recreate the project from scratch:
+
+```sh
+npx sv create --template minimal --types ts \
+  --add prettier eslint tailwindcss="plugins:typography,forms" \
+  sveltekit-adapter="adapter:auto" \
+  --install npm portfolio
+```
+
+---
+
+## project structure
+
+```
+src/
+├── routes/
+│   └── +page.svelte   # vinyl carousel + project detail view
+└── app.html
+```
