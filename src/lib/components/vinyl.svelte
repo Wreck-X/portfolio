@@ -1,17 +1,14 @@
 <script>
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
 
   const cards = [
-    { id: 1, title: "Aurora", sub: "Northern Lights", from: "#ffffff", to: "#ffffff" },
-    { id: 2, title: "Solaris", sub: "Solar Flares", from: "#ffffff", to: "#ffffff" },
-    { id: 3, title: "Nebula", sub: "Deep Space", from: "#ffffff", to: "#ffffff" },
-    { id: 4, title: "Abyssal", sub: "Ocean Floor", from: "#ffffff", to: "#ffffff" },
-    { id: 5, title: "Terra", sub: "Forest Depths", from: "#ffffff", to: "#ffffff" },
-    { id: 6, title: "Terra", sub: "Forest Depths", from: "#ffffff", to: "#ffffff" },
-    { id: 7, title: "Terra", sub: "Forest Depths", from: "#ffffff", to: "#ffffff" },
-    { id: 8, title: "Terra", sub: "Forest Depths", from: "#ffffff", to: "#ffffff" },
-    { id: 9, title: "Terra", sub: "Forest Depths", from: "#ffffff", to: "#ffffff" },
+    { id: 1, title: "Ink", sub: "The Reader", url: "https://github.com/Wreck-X/ink" },
+    { id: 2, title: "Browser", sub: "Prototype", url: "https://github.com/Wreck-X/browser-prototype" },
+    { id: 3, title: "News", sub: "Block", url: "https://github.com/Wreck-X/news-block" },
+    { id: 4, title: "Root", sub: "Club Backend", url: "https://github.com/Wreck-X/root" },
+    { id: 5, title: "Terrace", sub: "Kotlin App", url: "https://github.com/Wreck-X/terrace" },
   ];
+
   const RADIUS = 320;
   const total = cards.length;
   const stepAngle = 360 / total;
@@ -30,7 +27,6 @@
 
   onMount(() => { rafId = requestAnimationFrame(tick); });
 
-
   function snapToCard(i) {
     paused = true;
     snappedIndex = i;
@@ -47,6 +43,12 @@
     snappedIndex = null;
   }
 
+  function handleClick(i) {
+    if (snappedIndex === i) {
+      window.open(cards[i].url, '_blank');
+    }
+  }
+
   $: faceRotations = cards.map((_, i) => i === snappedIndex ? '0deg' : '90deg');
 </script>
 
@@ -54,7 +56,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="scene" on:mouseleave={unsnap}>
   <div class="stage-wrap">
     <div
@@ -64,26 +65,72 @@
       {#each cards as card, i}
         {@const cardAngle = stepAngle * i}
         {@const isActive = i === snappedIndex}
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
           class="card-wrap"
           style="transform: rotateY({cardAngle}deg) translateZ({RADIUS}px) rotateY({faceRotations[i]}); transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);"
           on:mouseenter={() => snapToCard(i)}
+          on:click={() => handleClick(i)}
+          role="button"
+          tabindex="0"
         >
           <div
-            class="card"
+            class="vinyl"
             style="
-              background: linear-gradient(135deg, {card.from}, {card.to});
-              opacity: {isActive ? 1 : 0.5};
+              opacity: {isActive ? 1 : 0.55};
               transform: {isActive ? 'translateZ(40px) scale(1.08)' : 'translateZ(0px) scale(1)'};
               transition: opacity 0.4s ease, transform 0.4s ease;
-              transform-style: preserve-3d;
+              cursor: {isActive ? 'pointer' : 'default'};
             "
           >
-            <div class="card-text">
-              <div class="card-title">{card.title}</div>
-              <div class="card-sub">{card.sub}</div>
-            </div>
+            <svg class="grooves" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="vinylGrad{i}" cx="50%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#3a3a3a" />
+                  <stop offset="40%" stop-color="#0f0f0f" />
+                  <stop offset="100%" stop-color="#050505" />
+                </radialGradient>
+                <radialGradient id="shineGrad{i}" cx="35%" cy="30%" r="55%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.18)" />
+                  <stop offset="60%" stop-color="rgba(255,255,255,0.03)" />
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                </radialGradient>
+                <radialGradient id="labelGrad{i}" cx="45%" cy="38%" r="60%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#e8e8e8" />
+                </radialGradient>
+              </defs>
+              <!-- Base disc -->
+              <circle cx="150" cy="150" r="148" fill={`url(#vinylGrad${i})`} />
+              <!-- Groove rings -->
+              {#each Array(28) as _, g}
+                <circle
+                  cx="150" cy="150"
+                  r={142 - g * 4.2}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.035)"
+                  stroke-width="1.2"
+                />
+              {/each}
+              <!-- White label -->
+              <circle cx="150" cy="150" r="68" fill={`url(#labelGrad${i})`} />
+              <!-- Label rings -->
+              <circle cx="150" cy="150" r="65" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+              <circle cx="150" cy="150" r="58" fill="none" stroke="rgba(0,0,0,0.07)" stroke-width="0.8"/>
+              <!-- Label text -->
+              <text x="150" y="140" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="20" fill="rgba(0,0,0,0.8)" letter-spacing="3">{card.title}</text>
+              <text x="150" y="158" text-anchor="middle" font-family="'Space Mono', monospace" font-size="7.5" fill="rgba(0,0,0,0.45)" letter-spacing="2">{card.sub}</text>
+              <!-- "Click to visit" hint only on active -->
+              {#if isActive}
+                <text x="150" y="176" text-anchor="middle" font-family="'Space Mono', monospace" font-size="5.5" fill="rgba(0,0,0,0.35)" letter-spacing="1.5">github ↗</text>
+              {:else}
+                <text x="150" y="176" text-anchor="middle" font-family="'Space Mono', monospace" font-size="6" fill="rgba(0,0,0,0.3)" letter-spacing="1">33⅓ RPM</text>
+              {/if}
+              <!-- Spindle hole -->
+              <circle cx="150" cy="150" r="5" fill="#111" />
+              <circle cx="150" cy="150" r="3" fill="#1a1a1a" />
+              <!-- Shine overlay -->
+              <circle cx="150" cy="150" r="148" fill={`url(#shineGrad${i})`} />
+            </svg>
           </div>
         </div>
       {/each}
@@ -96,14 +143,14 @@
     margin: 0;
     background: #09090b;
   }
-.scene {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  user-select: none;
-}
+  .scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
   .stage-wrap {
     position: relative;
     height: 340px;
@@ -125,30 +172,19 @@
     top: 50%;
     margin-left: -150px;
     margin-top: -150px;
-    cursor: pointer;
+    transform-style: preserve-3d;
   }
-  .card {
+  .vinyl {
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.7));
   }
-  .card-text { text-align: center; }
-  .card-title {
-    color: #09090b;
-    font-size: 36px;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 0.15em;
-  }
-  .card-sub {
-    color: rgba(0,0,0,0.45);
-    font-size: 11px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.3em;
-    margin-top: 4px;
+  .grooves {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    display: block;
   }
 </style>
