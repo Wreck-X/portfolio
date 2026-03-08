@@ -156,6 +156,7 @@
     height: 340px;
     width: 900px;
     perspective: 1200px;
+    transform: scale(0.65);   /* ← add this */
     overflow: visible;
   }
   .stage {
