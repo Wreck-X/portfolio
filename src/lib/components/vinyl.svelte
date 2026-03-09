@@ -269,14 +269,6 @@
     border-bottom: 1px solid rgba(255,255,255,0.055);
   }
   .header-left { display: flex; align-items: center; gap: 0.8rem; }
-  .header-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem; letter-spacing: 0.18em; color: #fff;
-  }
-  .header-divider {
-    color: rgba(255,255,255,0.13);
-    font-family: 'Space Mono', monospace; font-size: 0.75rem;
-  }
   .header-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem; letter-spacing: 0.22em;
@@ -286,15 +278,6 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.62rem; letter-spacing: 0.2em; color: rgba(255,255,255);
   }
-
-  .hint-corner {
-    position: absolute; top: 5.2rem; right: 2.2rem; z-index: 10;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.57rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(255,255,255);
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-
   .scene {
     display: flex; align-items: center; justify-content: center;
     width: 100%; height: 100%;
@@ -345,11 +328,6 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.58rem; letter-spacing: 0.14em;
     color: rgba(255,255,255); font-style: italic; margin-left: auto;
-  }
-  .card-info-hint {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: rgba(255,255,255,0.1); font-style: italic;
   }
   @keyframes fadeSlideUp {
     from { opacity: 0; transform: translateY(5px); }

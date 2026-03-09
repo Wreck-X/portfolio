@@ -13,5 +13,3 @@ Portfolio of mine I fear.
 - TypeScript, Prettier, ESLint
 
 
-
-
