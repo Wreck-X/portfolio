@@ -7,7 +7,7 @@
 
 const facts = [
   "Full-stack, mobile, and somehow still not satisfied.",
-  "Kotlin to Rust. React to Django. Yes, all of it.",
+  "Kotlin to Rust. React to Django.",
   "Chasing the intersection of clean architecture and beautiful interfaces.",
   "Drawing, coding, building.",
   "I make things work. Then I make them pretty. Then I refactor.",
