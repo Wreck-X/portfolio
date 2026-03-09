@@ -1,6 +1,5 @@
 <script>
 // @ts-nocheck
-
   import { onMount } from 'svelte';
 
   const cards = [
@@ -15,44 +14,24 @@
   const total = cards.length;
   const stepAngle = 360 / total;
 
+  let currentIndex = 0;
   let angle = 0;
-  let targetAngle = 0;
-  let rafId;
-  let paused = false;
-  let snappedIndex = null;
-  const speed = 0.3;
 
   let transitioning = false;
   let transitionDone = false;
   let clickedCard = null;
 
-  function tick() {
-    if (!paused) angle += speed;
-    rafId = requestAnimationFrame(tick);
+  function goTo(i) {
+    currentIndex = ((i % total) + total) % total;
+    angle = -currentIndex * stepAngle;
   }
 
-  onMount(() => { rafId = requestAnimationFrame(tick); });
+  function prev() { goTo(currentIndex - 1); }
+  function next() { goTo(currentIndex + 1); }
 
-  function snapToCard(i) {
-    paused = true;
-    snappedIndex = i;
-    const cardFrontAngle = -i * stepAngle;
-    let current = targetAngle % 360;
-    let diff = ((cardFrontAngle - current) % 360 + 540) % 360 - 180;
-    targetAngle = targetAngle + diff;
-    angle = targetAngle;
-  }
-
-  function unsnap() {
-    if (transitioning) return;
-    angle = targetAngle;
-    paused = false;
-    snappedIndex = null;
-  }
-
-  function handleClick(i) {
-    if (snappedIndex === i && !transitioning) {
-      clickedCard = cards[i];
+  function handleClick() {
+    if (!transitioning) {
+      clickedCard = cards[currentIndex];
       transitioning = true;
       setTimeout(() => { transitionDone = true; }, 700);
     }
@@ -62,11 +41,9 @@
     transitionDone = false;
     transitioning = false;
     clickedCard = null;
-    paused = false;
-    snappedIndex = null;
   }
 
-  $: faceRotations = cards.map((_, i) => i === snappedIndex ? '0deg' : '90deg');
+  $: faceRotations = cards.map((_, i) => i === currentIndex ? '0deg' : '90deg');
 </script>
 
 <svelte:head>
@@ -77,7 +54,6 @@
   <div class="screen carousel-screen" class:slide-out={transitioning}>
 
     <div class="bg-glow"></div>
-    <div class="bg-grid"></div>
     <div class="bg-scanlines"></div>
     <div class="bg-vignette"></div>
 
@@ -89,31 +65,31 @@
         <span class="header-count">{String(cards.length).padStart(2,'0')} records</span>
       </div>
     </header>
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="scene" on:mouseleave={unsnap}>
+
+    <div class="scene">
+      <!-- Left button -->
+      <button class="nav-btn" on:click={prev}>←</button>
+
       <div class="stage-wrap">
         <div
           class="stage"
-          style="transform: rotateX(-15deg) rotateY({angle}deg); transition: {snappedIndex !== null ? 'transform 0.6s cubic-bezier(0.4,0,0.2,1)' : 'none'};"
+          style="transform: rotateX(-15deg) rotateY({angle}deg); transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);"
         >
           {#each cards as card, i}
             {@const cardAngle = stepAngle * i}
-            {@const isActive = i === snappedIndex}
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            {@const isActive = i === currentIndex}
             <div
               class="card-wrap"
               style="transform: rotateY({cardAngle}deg) translateZ({RADIUS}px) rotateY({faceRotations[i]}); transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);"
-              on:mouseenter={() => snapToCard(i)}
-              on:click={() => handleClick(i)}
+              on:click={handleClick}
               role="button"
               tabindex="0"
             >
               <div
                 class="vinyl"
                 style="
-                  opacity: {isActive ? 1 : 1};
                   transform: {isActive ? 'translateZ(40px) scale(1.25)' : 'translateZ(0px) scale(1)'};
-                  transition: opacity 0.4s ease, transform 0.4s ease;
+                  transition: transform 0.4s ease;
                   cursor: {isActive ? 'pointer' : 'default'};
                   filter: {isActive
                     ? 'drop-shadow(0 0 32px rgba(255,255,255,0.1)) drop-shadow(0 16px 48px rgba(0,0,0,0.95))'
@@ -160,27 +136,24 @@
           {/each}
         </div>
       </div>
+
+      <!-- Right button -->
+      <button class="nav-btn" on:click={next}>→</button>
     </div>
 
     <div class="card-info-strip">
-      {#if snappedIndex !== null}
-        <div class="card-info-inner active">
-          <span class="card-info-index">{String(snappedIndex + 1).padStart(2,'0')} / {String(cards.length).padStart(2,'0')}</span>
-          <span class="card-info-sep">—</span>
-          <span class="card-info-title">{cards[snappedIndex].title}</span>
-          <span class="card-info-sub">{cards[snappedIndex].sub}</span>
-          <span class="card-info-cta">click to open ↗</span>
-        </div>
-      {:else}
-        <div class="card-info-inner idle">
-          <span class="card-info-hint">hover a record to preview</span>
-        </div>
-      {/if}
+      <div class="card-info-inner active">
+        <span class="card-info-index">{String(currentIndex + 1).padStart(2,'0')} / {String(cards.length).padStart(2,'0')}</span>
+        <span class="card-info-sep">—</span>
+        <span class="card-info-title">{cards[currentIndex].title}</span>
+        <span class="card-info-sub">{cards[currentIndex].sub}</span>
+        <span class="card-info-cta">click to open ↗</span>
+      </div>
     </div>
 
   </div>
 
-  <!-- ═══ DETAIL SCREEN ═══ -->
+  <!-- DETAIL SCREEN -->
   <div class="screen blank-screen" class:slide-in={transitioning}>
     {#if transitionDone && clickedCard}
       <div class="detail-page">
@@ -234,15 +207,11 @@
       </div>
     {/if}
   </div>
-
 </div>
 
+
 <style>
-  :global(body) {
-    margin: 0;
-    background: #07070a;
-    overflow: hidden;
-  }
+
 
   .root {
     position: relative;
@@ -261,7 +230,7 @@
   }
 
   .carousel-screen {
-    background: #07070a;
+
     transform: translateY(0);
     z-index: 1;
     overflow: hidden;
@@ -462,4 +431,32 @@
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+    .scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%; height: 100%;
+    user-select: none; position: relative; z-index: 5;
+  }
+
+.nav-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.08);
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10;
+  flex-shrink: 0;
+  align-self: stretch; /* fills full height of the flex row */
+  display: flex;
+  align-items: center;
+}
+.nav-btn:hover {
+  color: rgba(255,255,255,0.35);
+}
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import About from "$lib/components/about.svelte";
   import Vinyl from "$lib/components/vinyl.svelte";
   import Vscrollbar from "$lib/components/vscrollbar.svelte";
   import { onMount } from "svelte";
@@ -16,6 +17,8 @@
 
   onMount(async () => {
     sections = Array.from(container.querySelectorAll<HTMLElement>("section"));
+      console.log("detected sections:", sections.length, sections);
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -90,13 +93,12 @@
 
   </div>
 </section>
-
-  <section class="h-screen snap-start flex items-center justify-center relative">
-    <h2 class="font-forum text-5xl absolute top-32">Projects</h2>
-    <Vinyl />
-  </section>
+  <About />
+<section class="h-screen snap-start flex items-center justify-center relative">
+  <Vinyl />
+</section>
 </div>
 
 <!-- Fixed UI — lives outside the scroll container so it never moves -->
-<Vscrollbar {active} />
+<Vscrollbar {active}/>
 
