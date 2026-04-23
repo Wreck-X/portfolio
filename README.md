@@ -11,5 +11,3 @@ Portfolio of mine I fear.
 - [SvelteKit](https://kit.svelte.dev) — framework
 - [Tailwind CSS](https://tailwindcss.com) — styling (with typography + forms plugins)
 - TypeScript, Prettier, ESLint
-
-
