@@ -3,18 +3,67 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  --font-forum: 'Forum', serif;
+  --font-forum: 'Forum', Georgia, serif;
+  --font-bebas: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --color-ink: #0a0a0b;
 }
+
 @layer base {
-  @font-face {
-    font-family: 'Forum';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url('/fonts/Forum-Regular.woff2') format('woff2');
+  html {
+    background-color: var(--color-ink);
   }
 
+  /* no background on body: the liquid canvas lives at z-index -1 and an opaque
+     body background would paint on top of it; html keeps the ink fallback */
   body {
-    @apply bg-black text-white; 
+    @apply text-white antialiased;
+  }
+
+  /* Ambient glow — sits behind all content so every page shares one background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 90% 65% at 50% -12%, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 55% at 50% 112%, rgba(255, 255, 255, 0.035) 0%, transparent 65%),
+      radial-gradient(ellipse 120% 100% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+  }
+
+  /* Film grain — faint analog texture over every screen, echoing the vinyl theme */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

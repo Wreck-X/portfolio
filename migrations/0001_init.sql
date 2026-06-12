@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS posts (
+	slug TEXT PRIMARY KEY,
+	title TEXT NOT NULL,
+	date TEXT NOT NULL,
+	content TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS posts_date_idx ON posts(date DESC);

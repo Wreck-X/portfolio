@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "portfolio",
+	"compatibility_date": "2025-04-01",
+	"compatibility_flags": ["nodejs_compat"],
+	"pages_build_output_dir": ".svelte-kit/cloudflare",
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "portfolio-blog",
+			"database_id": "REPLACE_WITH_ID_FROM_WRANGLER_D1_CREATE"
+		}
+	],
+	"vars": {
+		"BLOG_ADMIN_PASSWORD": "changeme"
+	}
+}

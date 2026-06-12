@@ -10,6 +10,8 @@
 	let sections: HTMLElement[] = [];
 	let active = 0;
 
+	const sectionLabels = ['Intro', 'About', 'Projects'];
+
 	onMount(() => {
 		sections = detectSections(container);
 		const observer = createScrollObserver(sections, {
@@ -21,12 +23,25 @@
 
 		return () => observer.disconnect();
 	});
+
+	function scrollToSection(i: number) {
+		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		sections[i]?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+	}
 </script>
 
-<div bind:this={container} class="h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth">
-	<HeroSection />
+<svelte:head>
+	<title>Wreck — Software Developer</title>
+	<meta
+		name="description"
+		content="Portfolio of Wreck — building software products and petting cats. Full-stack and mobile developer working across SvelteKit, Rust, Kotlin and more."
+	/>
+</svelte:head>
+
+<div bind:this={container} class="h-dvh snap-y snap-mandatory overflow-y-scroll scroll-smooth">
+	<HeroSection onExplore={() => scrollToSection(1)} />
 	<AboutSection />
 	<VinylSection />
 </div>
 
-<Vscrollbar {active} />
+<Vscrollbar {active} labels={sectionLabels} onNavigate={scrollToSection} />

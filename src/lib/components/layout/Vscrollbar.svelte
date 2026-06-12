@@ -1,16 +1,32 @@
-<script>
-	export let active = 0;
-	$: offset = `${active * 100}%`;
-	$: opacity = active === 1 || active === 2 ? 0 : 1;
-	$: console.log('offset:', offset, active);
+<script lang="ts">
+	let {
+		active = 0,
+		labels = [],
+		onNavigate
+	}: {
+		active?: number;
+		labels?: string[];
+		onNavigate?: (index: number) => void;
+	} = $props();
 </script>
 
-<div
-	class="fixed top-16 right-4 bottom-16 z-50 hidden w-1 rounded-full bg-[#1A1A1A] transition-opacity duration-500 sm:block md:top-20 md:right-10 md:bottom-20 lg:right-32"
-	style="opacity: {opacity};"
+<nav
+	aria-label="Page sections"
+	class="fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 flex-col items-center gap-1 mix-blend-difference sm:flex md:right-8 lg:right-12"
 >
-	<div
-		class="h-1/3 rounded-full bg-white transition-transform duration-500 ease-out"
-		style="transform: translateY({offset})"
-	></div>
-</div>
+	{#each labels as label, i}
+		<button
+			type="button"
+			aria-label="Go to {label}"
+			aria-current={active === i ? 'true' : undefined}
+			onclick={() => onNavigate?.(i)}
+			class="group flex h-8 w-8 cursor-pointer items-center justify-center"
+		>
+			<span
+				class="block w-px rounded-full transition-all duration-300 {active === i
+					? 'h-6 bg-white'
+					: 'h-3 bg-white/30 group-hover:h-5 group-hover:bg-white/70'}"
+			></span>
+		</button>
+	{/each}
+</nav>

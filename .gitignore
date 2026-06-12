@@ -12,6 +12,9 @@ node_modules
 .DS_Store
 Thumbs.db
 
+# Editor/tool artifacts
+.omnitype
+
 # Env
 .env
 .env.*

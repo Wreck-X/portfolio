@@ -5,7 +5,14 @@
   export let index: number;  
 </script>  
 
-<svg class="grooves" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<!-- Decorative: the title/sub are always announced by adjacent text -->
+<svg
+    class="grooves"
+    viewBox="0 0 300 300"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    focusable="false"
+>
     <defs>
         <radialGradient id="vinylGrad{index}" cx="50%" cy="35%" r="65%">
             <stop offset="0%" stop-color="#3a3a3a" />
